@@ -1,13 +1,15 @@
 # Marvel-Character-Browser
 
-## User Story 
+## User Story
 
-## Acceptence Criteria 
+## Acceptence Criteria
 
-## Usage 
+## Usage
 
-## Screenshot 
+## Screenshot
 
-## Credits and Acknowledgement 
+## Credits and Acknowledgement
 
-## License 
+## License
+
+## Contributors
