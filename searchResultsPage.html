@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marvel Character Browser</title>
+    <link rel="stylesheet" href="./assets/style.css">
+</head>
+<body>
+    <div id="title-container">
+        <h1 id="title">Marvel Characters</h1>
+    </div>
+
+
+    <div id="search-container"> <!--Search bar-->
+            <form id="form">
+                <label for="Character" class="form-label">Search for a Character!:</label>
+                <input type="text" placeholder="Spiderman" id="userInput" name="Character" />
+                <button type="submit" id="searchBtn" class="btn">Search</button>
+            </form>
+    </div>
+       
+
+    <div id="recent-container">     <!--5 recent searches here, need to dynamically create search results in JS-->
+        <h2>Recent Searches:</h2>
+            <div class="last-search">
+                <div class="userInput"></div>
+            </div>
+            <div class="last-search">
+                <div class="userInput"></div>
+            </div>
+            <div class="last-search">
+                <div class="userInput"></div>
+            </div>
+            <div class="last-search">
+                <div class="userInput"></div>
+            </div>
+            <div class="last-search">
+                <div class="userInput"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="wikipedia-display">  <!--For the wiki?-->
+        <h3>Content here</h3>
+    </div>
+
+    <div id="search-results-container"> <!--We can put our search results in the list here?-->
+        <ul>
+            <li>List Item 1</li>
+            <li>List Item 2</li>
+            <li>List Item 3</li>
+            <li>List Item 4</li>
+            <li>List Item 5</li>
+        </ul>
+    </div>
+
+
+
+    <script src="./assets/script.js"></script>
+</body>
+</html>
