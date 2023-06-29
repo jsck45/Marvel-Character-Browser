@@ -36,16 +36,10 @@ fetch (idscrapper)
     })
 })})
 
-
-
-// initial Wiki API code
+// Initial Wiki API code
 const urlParams = new URLSearchParams(window.location.search);
 const queryFromURL = urlParams.get('query');
-
-// Get the form element
 const form = document.getElementById('form');
-
-// Get the input field
 const userInput = document.getElementById('userInput');
 
 // Set the value of the input field to the query from the URL
@@ -53,7 +47,7 @@ userInput.value = queryFromURL;
 
 // Function to fetch and display search results
 function fetchSearchResults(query) {
-  // Send the API request to your proxy server
+  // Send the API request to proxy server
   fetch('http://localhost:3000/wiki-proxy?q=' + encodeURIComponent(query))
     .then(function(response) {
       return response.json();
@@ -64,7 +58,7 @@ function fetchSearchResults(query) {
       const pageId = Object.keys(pages)[0];
       const extract = pages[pageId].extract;
       
-      // Extract the first paragraph
+      // Extract only the first paragraph
       const firstParagraph = extract.split('\n')[0];
       
       // Display the first paragraph
@@ -78,7 +72,12 @@ function fetchSearchResults(query) {
 // Call fetchSearchResults function immediately with the query
 fetchSearchResults(queryFromURL);
 
-// Add an event listener to the form submit event
+// Clear the input field and reset search results when the page is refreshed
+window.addEventListener('beforeunload', function() {
+  userInput.value = '';
+  document.getElementById('wikipedia-display').textContent = '';
+});
+
 form.addEventListener('submit', function(event) {
   event.preventDefault(); 
   console.log('Form submitted!');
