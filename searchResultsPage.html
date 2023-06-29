@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marvel Character Browser</title>
-    <link rel="stylesheet" href="./assets/style.css">
+    <link rel="stylesheet" href="./assets/css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
@@ -21,6 +21,13 @@
                 <button type="submit" id="searchBtn" class="btn bg-blue-500 rounded-lg">Search</button>
             </form>
         </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Please enter a search query.</p>
+        </div>
+    </div>
         
         <div id="recent-container" class="text-left border border-blue-500 border-2 w-40">
             <!-- 5 recent searches here, need to dynamically create search results in JS -->
@@ -61,8 +68,6 @@
             <li>List Item 5</li>
         </ul>
     </div>
-
-
 
     <script src="assets/js/SRPscript.js"></script>
     <script src="https://cdn.tailwindcss.com/2.2.19/tailwind.min.js"></script>

@@ -78,6 +78,10 @@ window.addEventListener('beforeunload', function() {
   document.getElementById('wikipedia-display').textContent = '';
 });
 
+// Error Message Modal
+const modal = document.getElementById('myModal');
+const closeBtn = document.getElementsByClassName('close')[0];
+
 form.addEventListener('submit', function(event) {
   event.preventDefault(); 
   console.log('Form submitted!');
@@ -85,9 +89,18 @@ form.addEventListener('submit', function(event) {
   // Get the search query from the form input field
   const queryFromInput = userInput.value;
 
-  // Determine the final search query to use
-  const query = queryFromInput || queryFromURL;
+  if (userInput.value.trim() === '') {
+    modal.style.display = 'block';
+  } else {
+    // Get the search query from the form input field
+    const query = userInput.value;
+  
+    // Redirect to the search results page with the query as a URL parameter
+    window.location.href = 'searchResultsPage.html?query=' + encodeURIComponent(query);
+  }
+});
 
-  // Call fetchSearchResults function
-  fetchSearchResults(query);
+
+closeBtn.addEventListener('click', function() {
+  modal.style.display = 'none';
 });
