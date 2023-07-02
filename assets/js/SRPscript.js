@@ -12,27 +12,23 @@ var Search_btn = document.getElementById('searchBtn');
 var entry = ""
 var recent_searches_container = document.getElementById('recent-container')
 var recent_searches = localStorage.getItem('recent-searches')
-if (recent_searches!==null) {
-  var recent_searches_ls = recent_searches.split("|")
-  console.log(recent_searches_ls)
-}
+var is_recent_searches = false
 
 //I'm still working on this recent Searches function - Jimmy
 function append_recent_search_li_element(event) {
   event.preventDefault()
-  if (!recent_searches_ls) {
-    return
-  }
-  if (recent_searches_ls.length<=1) {
-    return
-  }
+  if (recent_searches!==null && recent_searches.trim()!=="") {
+    var recent_searches_ls = recent_searches.split("|")
+    is_recent_searches = true
+  }  
+  if (is_recent_searches==true) {
   var recent_search_div = document.createElement("div")
-  recent_search_div.textContent = recent_searches_ls[recent_searches_ls.length-2]
+  recent_search_div.textContent = recent_searches_ls[recent_searches_ls.length-1]
   recent_searches_container.appendChild(recent_search_div)
+  }
 }
 
-function append_recent_search(event) {
-  event.preventDefault()
+function append_recent_search() {
   if (recent_searches!==null) {
     recent_searches = recent_searches + "|" + characterName.trim()
   } else {
@@ -49,19 +45,27 @@ function Search_Comics(event) {
   entry = userInput.value.trim()
   if (entry!=="") {
     entry = "nameStartsWith=" + entry + "&"
-    console.log(entry)
   }
 let idscrapper = "https://gateway.marvel.com/v1/public/characters?" + entry + "limit=50&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518"
 fetch (idscrapper)
 .then(function (response) {
   response.json().then(function(data) {
+    if (data.data.results.length>0) {
       while (true) {
+        console.log(data.data.results[characterIndex].comics.available)
           if (data.data.results[characterIndex].comics.available>0) {
               id = data.data.results[characterIndex].id
               characterName = data.data.results[characterIndex].name
+              console.log(characterName)
+              append_recent_search()
               break;
           }
           characterIndex++;
+          if (characterIndex===50) {
+            console.log("No results returned")
+            ///This is where you display the alert that no results were returned
+            break;
+          }
       }
       let comicscrapper = "https://gateway.marvel.com/v1/public/characters/" + id +"/comics?limit=10&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518"
       fetch (comicscrapper)
@@ -74,15 +78,18 @@ fetch (idscrapper)
           }
   })
   })
+    } else {
+      console.log("No results returned")
+      ///This is where you display the alert that no results were returned
+    }
 })})
 }
 
 Search_btn.addEventListener("click", Search_Comics)
-Search_btn.addEventListener("click", append_recent_search)
 Search_btn.addEventListener("click", append_recent_search_li_element)
 
 
-
+/*
 
 // Set the value of the input field to the query from the URL
 //userInput.value = queryFromURL;
@@ -210,4 +217,4 @@ form.addEventListener('submit', function(event) {
 
 closeBtn.addEventListener('click', function() {
   modal.style.display = 'none';
-});
+});*/
