@@ -1,62 +1,105 @@
 //initial Marvel API fetch code
+// Initial Wiki API code
 var id = ""
 var characterIndex = 0
 var characterName = ""
 var comics_list = document.getElementById("search-results-container")
+var urlParams = new URLSearchParams(window.location.search);
+var queryFromURL = urlParams.get('query');
+var form = document.getElementById('form'); // Get the form element
+var userInput = document.getElementById('userInput');
+var Search_btn = document.getElementById('searchBtn');
+var entry = ""
+var recent_searches_container = document.getElementById('recent-container')
+var recent_searches = localStorage.getItem('recent-searches')
+var is_recent_searches = false
 
-entry = "Spi"
-if (entry!=="") {
-    entry = "nameStartsWith=" + entry + "&"
+//I'm still working on this recent Searches function - Jimmy
+function append_recent_search_li_element(event) {
+  event.preventDefault()
+  if (recent_searches!==null && recent_searches.trim()!=="") {
+    var recent_searches_ls = recent_searches.split("|")
+    is_recent_searches = true
+  }  
+  if (is_recent_searches==true) {
+  var recent_search_div = document.createElement("div")
+  recent_search_div.textContent = recent_searches_ls[recent_searches_ls.length-1]
+  recent_searches_container.appendChild(recent_search_div)
+  }
 }
 
-let idscrapper = "https://gateway.marvel.com/v1/public/characters?" + entry + "ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518"
+function append_recent_search() {
+  if (recent_searches!==null) {
+    recent_searches = recent_searches + "|" + characterName.trim()
+  } else {
+    recent_searches = characterName
+  }
+  localStorage.setItem('recent-searches', recent_searches)
+}
+
+function Search_Comics(event) {
+  event.preventDefault()
+  while (comics_list.childElementCount>0) {
+    comics_list.children[0].remove();
+  }
+  entry = userInput.value.trim()
+  if (entry!=="") {
+    entry = "nameStartsWith=" + entry + "&"
+  }
+let idscrapper = "https://gateway.marvel.com/v1/public/characters?" + entry + "limit=50&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518"
 fetch (idscrapper)
 .then(function (response) {
-    response.json().then(function(data) {
+  response.json().then(function(data) {
+    if (data.data.results.length>0) {
+      while (true) {
         console.log(data.data.results[characterIndex].comics.available)
-        while (true) {
-            if (data.data.results[characterIndex].comics.available>0) {
-                id = data.data.results[characterIndex].id
-                console.log(data.data.results[characterIndex].name)
-                characterName = data.data.results[characterIndex].name
-                break;
-            }
-            characterIndex++;
-        }
-        let comicscrapper = "https://gateway.marvel.com/v1/public/characters/" + id +"/comics?ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518"
-        fetch (comicscrapper)
-        .then(function (response2) {
-            response2.json().then(function(data) {
-            for (i=0;i<data.data.results.length;i++) {
-                currentComic = document.createElement("li")
-                currentComic.textContent = data.data.results[i].title
-                comics_list.appendChild(currentComic)
-            }
-    })
-    })
+          if (data.data.results[characterIndex].comics.available>0) {
+              id = data.data.results[characterIndex].id
+              characterName = data.data.results[characterIndex].name
+              console.log(characterName)
+              append_recent_search()
+              break;
+          }
+          characterIndex++;
+          if (characterIndex===50) {
+            console.log("No results returned")
+            ///This is where you display the alert that no results were returned
+            break;
+          }
+      }
+      let comicscrapper = "https://gateway.marvel.com/v1/public/characters/" + id +"/comics?limit=10&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518"
+      fetch (comicscrapper)
+      .then(function (response2) {
+          response2.json().then(function(data) {
+          for (i=0;i<data.data.results.length;i++) {
+              currentComic = document.createElement("li")
+              currentComic.textContent = data.data.results[i].title
+              comics_list.appendChild(currentComic)
+          }
+  })
+  })
+    } else {
+      console.log("No results returned")
+      ///This is where you display the alert that no results were returned
+    }
 })})
+}
 
-// Initial Wiki API code
-const urlParams = new URLSearchParams(window.location.search);
-const queryFromURL = urlParams.get('query');
-const form = document.getElementById('form');
-const userInput = document.getElementById('userInput');
+Search_btn.addEventListener("click", Search_Comics)
+Search_btn.addEventListener("click", append_recent_search_li_element)
+
+
+/*
 
 // Set the value of the input field to the query from the URL
-userInput.value = queryFromURL;
-
-// initial Wiki API code
-const urlParams = new URLSearchParams(window.location.search);
-const queryFromURL = urlParams.get('query');
+//userInput.value = queryFromURL;
 
 // Get the form element
-const form = document.getElementById('form');
 
 // Get the input field
-const userInput = document.getElementById('userInput');
 
 // Set the value of the input field to the query from the URL
-userInput.value = queryFromURL;
+//userInput.value = queryFromURL;
 
 // Function to fetch and display search results
 function fetchSearchResults(query) {
@@ -98,6 +141,7 @@ form.addEventListener('submit', function(event) {
 
   // Call fetchSearchResults function
   fetchSearchResults(query);
+})
 
 // Function to fetch and display search results
 function fetchSearchResults(query) {
@@ -115,7 +159,7 @@ fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(
     // Parse the response and extract the first paragraph
     const pages = data.query.pages;
     const pageId = Object.keys(pages)[0];
-    const extract = pages[pageId].extract;
+    var extract = pages[pageId].extract;
 
     // Extract only the first paragraph
     const firstParagraph = extract.split('\n')[0];
@@ -124,7 +168,7 @@ fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(
     document.getElementById('wikipedia-display').textContent = firstParagraph;
 
     // Get the extract and full URL from the response
-    const extract = data.extract;
+    extract = data.extract;
     const fullUrl = data.content_urls.desktop.page;
 
     // Display the extract
@@ -173,4 +217,4 @@ form.addEventListener('submit', function(event) {
 
 closeBtn.addEventListener('click', function() {
   modal.style.display = 'none';
-});
+});*/
