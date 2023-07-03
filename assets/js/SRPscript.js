@@ -22,9 +22,15 @@ function append_recent_search_li_element(event) {
     is_recent_searches = true
   }  
   if (is_recent_searches==true) {
-  var recent_search_div = document.createElement("div")
+  var recent_search_div = document.createElement("button")
+  recent_search_div.setAttribute('class', 'last-search')
   recent_search_div.textContent = recent_searches_ls[recent_searches_ls.length-1]
   recent_searches_container.appendChild(recent_search_div)
+  recent_search_div.addEventListener("click", function (event) {
+    event.preventDefault()
+    userInput.value = recent_searches_ls[recent_searches_ls.length-1]
+    Search_btn.click()
+  })
   }
 }
 
