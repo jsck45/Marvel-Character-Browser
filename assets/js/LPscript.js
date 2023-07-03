@@ -31,7 +31,7 @@ closeBtn.addEventListener('click', function() {
   modal.style.display = 'none';
 });
 
-// Clear input field on when back button is pressed
+// Clear input field when the back button is pressed
 window.addEventListener('pageshow', function(event) {
   queryInput.value = '';
 });
