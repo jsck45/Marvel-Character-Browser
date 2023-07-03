@@ -119,47 +119,65 @@ fetch (idscrapper)
 Search_btn.addEventListener("click", Search_Comics);
 Search_btn.addEventListener("click", append_recent_search_li_element);
 
-// Function to fetch and display search results
+// Function to fetch and display search results from Wikipedia API
 function fetchSearchResults(query) {
-  // Send the API request to your proxy server
-  fetch('http://localhost:3000/wiki-proxy?q=' + encodeURIComponent(query))
+  // Construct the API URL for fetching search results from Wikipedia
+  const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exintro&explaintext&titles=${encodeURIComponent(query)}`;
+
+  // Fetch search results from Wikipedia API
+  fetch(apiUrl)
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
-      // Parse the response and extract the first paragraph
-      const pages = data.query.pages;
-      const pageId = Object.keys(pages)[0];
-      const extract = pages[pageId].extract;
+      if (data.hasOwnProperty('query') && data.query.hasOwnProperty('pages')) {
+        const pages = data.query.pages;
+        const pageId = Object.keys(pages)[0];
+        const extract = pages[pageId].extract;
 
-      // Extract the first paragraph
-      const firstParagraph = extract.split('\n')[0];
+        // Extract the first paragraph
+        const firstParagraph = extract.split('\n')[0];
 
-      // Display the first paragraph
-      document.getElementById('wikipedia-display').textContent = firstParagraph;
+        // Display the first paragraph
+        document.getElementById('wikipedia-display').textContent = firstParagraph;
+
+        // Construct the full Wikipedia URL using the page ID
+        const fullUrl = `https://en.wikipedia.org/?curid=${pageId}`;
+
+        // Display the extract
+        // document.getElementById('wiki-extract').textContent = extract;
+
+        // Display a link to the full article
+        const fullWikiLink = document.getElementById('full-wiki-link');
+        fullWikiLink.href = fullUrl;
+        fullWikiLink.style.display = 'inline';
+      } else {
+        // If 'pages' property is missing, display an error message or handle it gracefully
+        console.log("Pages not found in the response.");
+      }
     })
     .catch(function (error) {
       console.log('Error:', error);
     });
 }
 
-// Call fetchSearchResults function immediately with the query
+// Call fetchSearchResults function immediately with the query from the URL
 fetchSearchResults(queryFromURL);
 
-// Add an event listener to the form submit event
-form.addEventListener('submit', function (event) {
-  event.preventDefault();
-  console.log('Form submitted!');
+// // Add an event listener to the form submit event
+// form.addEventListener('submit', function (event) {
+//   event.preventDefault();
+//   console.log('Form submitted!');
 
-  // Get the search query from the form input field
-  const queryFromInput = userInput.value;
+//   // Get the search query from the form input field
+//   const queryFromInput = userInput.value;
 
-  // Determine the final search query to use
-  const query = queryFromInput || queryFromURL;
+//   // Determine the final search query to use - either from landing page or form input
+//   const query = queryFromInput || queryFromURL;
 
-  // Call fetchSearchResults function
-  fetchSearchResults(query);
-});
+//   // Call fetchSearchResults function
+//   fetchSearchResults(query);
+// });
 
 // Clear the input field and reset search results when the page is refreshed
 window.addEventListener('beforeunload', function () {
@@ -179,7 +197,7 @@ form.addEventListener('submit', function (event) {
   const queryFromInput = userInput.value;
 
   if (userInput.value.trim() === '') {
-    modal.style.display = 'block';fe
+    modal.style.display = 'block';
   } else {
     // Get the search query from the form input field
     const query = userInput.value;
