@@ -197,3 +197,55 @@ closeBtn.addEventListener('click', function () {
 // var timestamp;
 // var apiUrl;
 
+// function fetchComicThumbnails(characterId) {
+//   // Construct the API URL to fetch comics for the character
+//   var comicsUrl =
+//     "https://gateway.marvel.com/v1/public/characters/" +
+//     characterId +
+//     "/comics?limit=10&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518";
+
+//   fetch(comicsUrl)
+//     .then(function (response) {
+//       if (!response.ok) {
+//         throw new Error("Failed to fetch comics for the character. Status: " + response.status);
+//       }
+//       return response.json();
+//     })
+//     .then(function (data) {
+//       if (!data.data || !data.data.results || data.data.results.length === 0) {
+//         throw new Error("No comics found for the character");
+//       }
+
+//       // Extract the comic data from the response
+//       var comicsData = data.data.results;
+
+//       // Clear the existing list items
+//       while (comics_list.firstChild) {
+//         comics_list.removeChild(comics_list.firstChild);
+//       }
+
+//       // Loop through the comic data and create list items with thumbnail images
+//       comicsData.forEach(function (comic) {
+//         var comicListItem = document.createElement("li");
+//         var comicTitle = document.createElement("span");
+//         var comicThumbnail = document.createElement("img");
+
+//         comicTitle.textContent = comic.title;
+
+//         if (comic.thumbnail && comic.thumbnail.path && comic.thumbnail.extension) {
+//           var thumbnailUrl = comic.thumbnail.path + "." + comic.thumbnail.extension;
+//           comicThumbnail.src = thumbnailUrl;
+//           comicThumbnail.alt = comic.title;
+//         } else {
+//           console.log("Missing thumbnail data for comic:", comic.title);
+//         }
+
+//         comicListItem.appendChild(comicThumbnail);
+//         comicListItem.appendChild(comicTitle);
+//         comics_list.appendChild(comicListItem);
+//       });
+//     })
+//     .catch(function (error) {
+//       console.log("Error fetching comic thumbnails:", error);
+//     });
+// }
