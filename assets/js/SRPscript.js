@@ -217,4 +217,111 @@ form.addEventListener('submit', function(event) {
 
 closeBtn.addEventListener('click', function() {
   modal.style.display = 'none';
-});*/
+}); */
+
+// var publicKey;
+// var timestamp;
+// var apiUrl;
+
+
+// //Search function that dynamically creates a list for searched characters (id) + image thumbnail from comic object
+// document.getElementById("form").addEventListener("submit", function(event) {
+//   event.preventDefault();
+//   console.log("search submitted!");
+
+//   // Get the search query
+//   var query = document.getElementById("userInput").value;
+
+//   // Send the API request to fetch character data by name
+//   fetchCharacter(query)
+//     .then(function(characterData) {
+//       var characterId = characterData.id;
+
+//       // Fetch comics data for the character by ID
+//       return fetchCharacterComics(characterId);
+//     })
+//     .then(function(comicsData) {
+//       // Display the character and comics data
+//       displayCharacterAndComics(comicsData);
+//     })
+//     .catch(function(error) {
+//       console.log("Error:", error);
+//     });
+// });
+
+// // Function to fetch character data by name
+// function fetchCharacter(name) {
+//   var publicKey = "7eb8329799fa8406819851c63f0c36b3";
+//   var timestamp = Date.now().toString();
+//   var apiUrl = "https://gateway.marvel.com/v1/public/characters?name=" + encodeURIComponent(name) + "&ts=" + timestamp + "&apikey=" + publicKey;
+
+//   return fetch(apiUrl)
+//     .then(function(response) {
+//       return response.json();
+//     })
+//     .then(function(data) {
+//       return data.data.results[0]; // Return the first character object
+//     });
+// }
+
+
+// // Function to fetch comics data for a character by ID
+// function fetchCharacterComics(characterId) {
+//   var publicKey = "7eb8329799fa8406819851c63f0c36b3";
+//   var timestamp = Date.now().toString();
+//   var apiUrl = "https://gateway.marvel.com/v1/public/characters/" + characterId + "/comics?ts=" + timestamp + "&apikey=" + publicKey;
+
+//   return fetch(apiUrl)
+//     .then(function(response) {
+//       return response.json();
+//     })
+//     .then(function(data) {
+//       var comicsData = data.data.results;
+
+//       // Extract relevant information from the comic objects
+//       var comics = comicsData.map(function(comic) {
+//         return {
+//           id: comic.id,
+//           thumbnail: comic.thumbnail.path + "." + comic.thumbnail.extension
+//         };
+//       });
+
+//       return comics; // Return the array of comics with ID and thumbnail
+//     });
+// }
+
+// // Function to display the character and comics data
+// function displayCharacterAndComics(comicsData) {
+//   var resultsContainer = document.getElementById("search-results-container");
+
+//   // Clear the existing content in the results container
+//   resultsContainer.innerHTML = "";
+
+//   // Create a list element
+//   var list = document.createElement("ul");
+
+//   // Iterate over the comics data and create list items
+//   comicsData.forEach(function(comic) {
+//     // Extract relevant information from the comic object
+//     var comicId = comic.id;
+//     var thumbnail = comic.thumbnail;
+
+//     // Create list item elements and set their content
+//     var listItem = document.createElement("li");
+//     var comicIdElement = document.createElement("p");
+//     var imageElement = document.createElement("img");
+
+//     comicIdElement.textContent = "Comic ID: " + comicId;
+//     imageElement.src = thumbnail;
+
+//     // Append the elements to the list item
+//     listItem.appendChild(comicIdElement);
+//     listItem.appendChild(imageElement);
+
+//     // Append the list item to the list
+//     list.appendChild(listItem);
+//   });
+
+//   // Append the list to the results container
+//   resultsContainer.appendChild(list);
+// }
