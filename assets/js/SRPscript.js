@@ -13,7 +13,25 @@ var recent_searches_container = document.getElementById('recent-container');
 var recent_searches = localStorage.getItem('recent-searches');
 var is_recent_searches = false;
 
-//I'm still working on this recent Searches function - Jimmy
+
+function sort_chars(array) { 
+  for (var i=0;i<(array.length-1);i++){
+      var swp = false
+      for (var j=0;j<(array.length-i-1);j++){
+          if (array[j].comics.available >array[j+1].comics.available) {
+              var temp = array [j]
+              array[j]=array[j+1]
+              array[j+1] = temp
+              swp = true
+          }
+      }
+  if (!swp) {
+      break;
+  }
+  }
+  return(array)
+}
+
 function append_recent_search_li_element(event) {
 
   event.preventDefault()
@@ -53,44 +71,49 @@ function Search_Comics(event) {
   if (entry !== "") {
     entry = "nameStartsWith=" + entry + "&";
   }
-  let idscrapper = "https://gateway.marvel.com/v1/public/characters?" + entry + "limit=50&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518";
-  fetch(idscrapper)
-    .then(function (response) {
-      response.json().then(function (data) {
-        if (data.data.results.length > 0) {
-          while (true) {
-            console.log(data.data.results[characterIndex].comics.available);
-            if (data.data.results[characterIndex].comics.available > 0) {
-              id = data.data.results[characterIndex].id;
-              characterName = data.data.results[characterIndex].name;
-              console.log(characterName);
-              append_recent_search();
+let idscrapper = "https://gateway.marvel.com/v1/public/characters?" + entry + "limit=50&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518"
+fetch (idscrapper)
+.then(function (response) {
+  response.json().then(function(data) {
+    if (data.data.results.length>0) {
+      var results_given = data.data.results
+      results_given = sort_chars(results_given)
+      results_given = results_given.reverse()
+      while (true) {
+        console.log(results_given[characterIndex].comics.available)
+          if (results_given[characterIndex].comics.available>0) {
+              id = results_given[characterIndex].id
+              characterName = results_given[characterIndex].name
+              console.log(characterName)
+              append_recent_search()
               break;
             }
-            characterIndex++;
-            if (characterIndex === 50) {
-              console.log("No results returned");
-              ///This is where you display the alert that no results were returned
-              break;
-            }
+          characterIndex++;
+          if (characterIndex===50) {
+            characterIndex = 0
+            console.log("No results returned")
+            ///This is where you display the alert that no results were returned
+            break;
           }
-          let comicscrapper = "https://gateway.marvel.com/v1/public/characters/" + id + "/comics?limit=10&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518";
-          fetch(comicscrapper)
-            .then(function (response2) {
-              response2.json().then(function (data) {
-                for (i = 0; i < data.data.results.length; i++) {
-                  currentComic = document.createElement("li");
-                  currentComic.textContent = data.data.results[i].title;
-                  comics_list.appendChild(currentComic);
-                }
-              });
-            });
-        } else {
-          console.log("No results returned");
-          ///This is where you display the alert that no results were returned
-        }
-      });
-    });
+      }
+      let comicscrapper = "https://gateway.marvel.com/v1/public/characters/" + id +"/comics?limit=10&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518"
+      fetch (comicscrapper)
+      .then(function (response2) {
+        console.log(data.data.results)
+          response2.json().then(function(data) {
+            console.log(data.data.results)
+            for (i=0;i<data.data.results.length;i++) {
+                currentComic = document.createElement("li")
+                currentComic.textContent = data.data.results[i].title
+                comics_list.appendChild(currentComic)
+            }
+  })
+  })
+    } else {
+      console.log("No results returned")
+      ///This is where you display the alert that no results were returned
+    }
+})})
 }
 
 Search_btn.addEventListener("click", Search_Comics);
