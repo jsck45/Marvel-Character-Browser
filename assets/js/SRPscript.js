@@ -197,13 +197,15 @@ closeBtn.addEventListener('click', function () {
 // var timestamp;
 // var apiUrl;
 
-// function fetchComicThumbnails(characterId) {
+
+
+// function fetchComicThumbnails(entry) {
 //   // Construct the API URL to fetch comics for the character
 //   var comicsUrl =
-//     "https://gateway.marvel.com/v1/public/characters/" +
-//     characterId +
-//     "/comics?limit=10&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518";
-
+//     "https://gateway.marvel.com/v1/public/characters?" +
+//     entry +
+//     "&limit=10&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518";
+// console.log(entry);
 //   fetch(comicsUrl)
 //     .then(function (response) {
 //       if (!response.ok) {
@@ -212,9 +214,11 @@ closeBtn.addEventListener('click', function () {
 //       return response.json();
 //     })
 //     .then(function (data) {
+//       console.log(data);
 //       if (!data.data || !data.data.results || data.data.results.length === 0) {
-//         throw new Error("No comics found for the character");
+//         throw new Error("No comics found for the character" + entry);
 //       }
+
 
 //       // Extract the comic data from the response
 //       var comicsData = data.data.results;
@@ -249,3 +253,9 @@ closeBtn.addEventListener('click', function () {
 //       console.log("Error fetching comic thumbnails:", error);
 //     });
 // }
+
+// // Assuming you have the entry value
+// var entry = "nameStartsWith=Spider-Man";
+
+// // Call fetchComicThumbnails with the entry
+// fetchComicThumbnails(entry);
