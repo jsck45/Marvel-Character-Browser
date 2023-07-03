@@ -4,28 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marvel Character Browser</title>
-    <link rel="stylesheet" href="./assets/style.css">
+    <link rel="stylesheet" href="./assets/css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <div id="title-container">
-        <h1 id="title">Marvel Characters</h1>
+    <div id="title-container" class="flex justify-center items-center">
+        <h1 id="title" class="text-4xl border border-red-500 p-4">Marvel Characters</h1>
     </div>
+    
 
-
-    <div id="search-container"> <!--Search bar-->
+    <div class="grid grid-cols-1 gap-4">
+        <div id="search-container" class="text-left border border-blue-500 border-2 w-40"> <!-- Search bar -->
             <form id="form">
                 <label for="Character" class="form-label">Search for a Character!:</label>
                 <input type="text" placeholder="Spiderman" id="userInput" name="Character" />
-                <button type="submit" id="searchBtn" class="btn">Search</button>
+                <button type="submit" id="searchBtn" class="btn bg-blue-500 rounded-lg">Search</button>
             </form>
-    </div>
-       
+        </div>
 
-    <div id="recent-container">     <!--5 recent searches here, need to dynamically create search results in JS-->
-        <h2>Recent Searches:</h2>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Please enter a search query.</p>
+        </div>
+    </div>
+        
+        <div id="recent-container" class="text-left border border-blue-500 border-2 w-40">
+            <!-- 5 recent searches here, need to dynamically create search results in JS -->
+            <h2>Recent Searches:</h2>
             <div class="last-search">
                 <div class="userInput"></div>
+                <p>Help me</p>
             </div>
             <div class="last-search">
                 <div class="userInput"></div>
@@ -41,12 +50,15 @@
             </div>
         </div>
     </div>
-
-    <div id="wikipedia-display">  <!--For the wiki?-->
-        <h3>Content here</h3>
-    </div>
-
-    <div id="search-results-container"> <!--We can put our search results in the list here?-->
+    
+    
+    <div id="wikipedia-display" class="border border-blue-500 border-solid border-2">
+        <p id="wiki-extract"></p>
+        <a id="full-wiki-link" href="#" target="_blank" style="display: none;">Read Full Article</a>
+      </div>
+      
+    <div id="search-results-container" class=" border-blue-500 border-2 w-60"> <!--We can put our search results in the list here?-->
+        <h4>Your search results here</h4>
         <ul>
             <li>List Item 1</li>
             <li>List Item 2</li>
@@ -56,8 +68,7 @@
         </ul>
     </div>
 
-
-
-    <script src="./assets/script.js"></script>
+    <script src="assets/js/SRPscript.js"></script>
+    <script src="https://cdn.tailwindcss.com/2.2.19/tailwind.min.js"></script>
 </body>
 </html>
