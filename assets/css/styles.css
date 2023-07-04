@@ -75,7 +75,7 @@
 }
 
 #title {
-  font-family: 'Bangers', cursive;
+  font-family: 'Bangers', cursive, Arial, Helvetica, sans-serif;
   font-size: 500%;
   padding: 70px 100px;
   background: red;
@@ -91,5 +91,5 @@
 }
 
 .container, .right-container, .modal, .text-center {
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Roboto Mono', monospace, Arial, Helvetica, sans-serif;
 }
