@@ -73,6 +73,7 @@ function Search_Comics(event) {
     console.log("No results returned");
     displayErrorModal("Please enter a search query.");
     clearPage();
+
     return;
   }
   if (entry !== "") {
@@ -119,6 +120,7 @@ function Search_Comics(event) {
         } if (data.data.results.length === 0) {
           console.log("No results found");
           displayErrorModal("No results found!");
+
           clearPage(); 
         }
       });
