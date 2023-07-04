@@ -78,16 +78,20 @@ function Search_Comics(event) {
   if (entry !== "") {
     entry = "nameStartsWith=" + entry + "&";
   }
+
   let idscrapper = "https://gateway.marvel.com/v1/public/characters?" + entry + "limit=50&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518";
   fetch(idscrapper)
     .then(function(response) {
       response.json().then(function(data) {
         if (data.data.results.length > 0) {
+          var results_given = data.data.results
+          results_given = sort_chars(results_given)
+          results_given = results_given.reverse()
           while (true) {
-            console.log(data.data.results[characterIndex].comics.available);
-            if (data.data.results[characterIndex].comics.available > 0) {
-              id = data.data.results[characterIndex].id;
-              characterName = data.data.results[characterIndex].name;
+            console.log(results_given[characterIndex].comics.available);
+            if (results_given[characterIndex].comics.available > 0) {
+              id = results_given[characterIndex].id;
+              characterName = results_given[characterIndex].name;
               console.log(characterName);
               append_recent_search();
               fetchWikipediaContent(characterName);
