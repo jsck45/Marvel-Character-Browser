@@ -183,6 +183,7 @@ function displayWikipediaContent(content) {
     const wikipediaURL = `https://en.wikipedia.org/wiki/${encodeURIComponent(characterName)}`;
     fullWikiLink.href = wikipediaURL;
     fullWikiLink.style.display = 'inline';
+    fullWikiLink.style.background = "red";
   } else {
     fullWikiLink.style.display = 'none';
   }
