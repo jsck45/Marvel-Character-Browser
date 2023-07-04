@@ -73,3 +73,11 @@
   flex: 1;
   padding: 1rem;
 }
+
+#title {
+  font-family: 'Bangers', cursive;
+  font-size: 500%;
+  padding: 70px 100px;
+  background: red;
+  letter-spacing: 5px;
+}
