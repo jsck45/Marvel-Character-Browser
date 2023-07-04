@@ -12,6 +12,8 @@ var entry = "";
 var recent_searches_container = document.getElementById('recent-container');
 var recent_searches = localStorage.getItem('recent-searches');
 var is_recent_searches = false;
+var modal = document.getElementById('myModal');
+
 
 
 function sort_chars(array) { 
@@ -61,6 +63,7 @@ function append_recent_search() {
   }
   localStorage.setItem('recent-searches', recent_searches);
 }
+
 
 function Search_Comics(event) {
   event.preventDefault();
@@ -113,7 +116,8 @@ function Search_Comics(event) {
             });
         } else {
           console.log("No results returned");
-          // Display an alert that no results were returned
+          modal.style.display = 'block';
+          return;        
         }
       });
     });
@@ -138,7 +142,7 @@ function fetchWikipediaContent(characterName) {
     .catch(function(error) {
       console.log("Error fetching Wikipedia content:", error);
       displayWikipediaContent('');
-
+      modal.style.display = 'block'; // Show the error modal
     });
 }
 
