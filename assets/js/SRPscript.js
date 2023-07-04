@@ -13,27 +13,25 @@ var recent_searches_container = document.getElementById('recent-container');
 var recent_searches = localStorage.getItem('recent-searches');
 var is_recent_searches = false;
 var modal = document.getElementById('myModal');
+var modalMessage = document.getElementById('modal-message')
+const closeBtn = document.getElementsByClassName('close')[0];
 
-
-//I'm still working on this recent Searches function - Jimmy
 function append_recent_search_li_element(event) {
-
-  event.preventDefault()
-  if (recent_searches!==null && recent_searches.trim()!=="") {
-    var recent_searches_ls = recent_searches.split("|")
-    is_recent_searches = true
-  }  
-  if (is_recent_searches==true) {
-  var recent_search_div = document.createElement("button")
-  recent_search_div.setAttribute('class', 'last-search')
-  recent_search_div.textContent = recent_searches_ls[recent_searches_ls.length-1]
-  recent_searches_container.appendChild(recent_search_div)
-  recent_search_div.addEventListener("click", function (event) {
-    event.preventDefault()
-    userInput.value = recent_searches_ls[recent_searches_ls.length-1]
-    Search_btn.click()
-  })
-
+  event.preventDefault();
+  if (recent_searches !== null && recent_searches.trim() !== "") {
+    var recent_searches_ls = recent_searches.split("|");
+    is_recent_searches = true;
+  }
+  if (is_recent_searches == true) {
+    var recent_search_div = document.createElement("button");
+    recent_search_div.setAttribute('class', 'last-search');
+    recent_search_div.textContent = recent_searches_ls[recent_searches_ls.length - 1];
+    recent_searches_container.appendChild(recent_search_div);
+    recent_search_div.addEventListener("click", function(event) {
+      event.preventDefault();
+      userInput.value = recent_searches_ls[recent_searches_ls.length - 1];
+      Search_btn.click();
+    });
   }
 }
 
@@ -46,20 +44,25 @@ function append_recent_search() {
   localStorage.setItem('recent-searches', recent_searches);
 }
 
-
 function Search_Comics(event) {
   event.preventDefault();
   while (comics_list.childElementCount > 0) {
     comics_list.children[0].remove();
   }
   entry = userInput.value.trim();
+  if (entry === "") {
+    console.log("No results returned");
+    modal.style.display = 'block';
+    modalMessage.textContent = "Please enter a search query."
+    return;
+  }
   if (entry !== "") {
     entry = "nameStartsWith=" + entry + "&";
   }
   let idscrapper = "https://gateway.marvel.com/v1/public/characters?" + entry + "limit=50&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518";
   fetch(idscrapper)
-    .then(function (response) {
-      response.json().then(function (data) {
+    .then(function(response) {
+      response.json().then(function(data) {
         if (data.data.results.length > 0) {
           while (true) {
             console.log(data.data.results[characterIndex].comics.available);
@@ -74,14 +77,15 @@ function Search_Comics(event) {
             characterIndex++;
             if (characterIndex === 50) {
               console.log("No results returned");
-              // Display an alert that no results were returned
-              break;
+              modal.style.display = 'block';
+              modalMessage.textContent = "No results found!"
+              return;
             }
           }
           let comicscrapper = "https://gateway.marvel.com/v1/public/characters/" + id + "/comics?limit=10&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518";
           fetch(comicscrapper)
-            .then(function (response2) {
-              response2.json().then(function (data) {
+            .then(function(response2) {
+              response2.json().then(function(data) {
                 for (i = 0; i < data.data.results.length; i++) {
                   currentComic = document.createElement("li");
                   currentComic.textContent = data.data.results[i].title;
@@ -89,11 +93,7 @@ function Search_Comics(event) {
                 }
               });
             });
-        } else {
-          console.log("No results returned");
-          modal.style.display = 'block';
-          return;        
-        }
+        } 
       });
     });
 }
@@ -133,4 +133,14 @@ function displayWikipediaContent(content) {
 userInput.value = decodeURIComponent(queryFromURL);
 window.addEventListener('DOMContentLoaded', function() {
   Search_btn.click();
+});
+
+// Close modal
+closeBtn.addEventListener('click', function() {
+  modal.style.display = 'none';
+});
+
+// Clear input field when back button is pressed
+window.addEventListener('pageshow', function(event) {
+  userInput.value = '';
 });
