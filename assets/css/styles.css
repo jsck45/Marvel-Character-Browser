@@ -81,3 +81,15 @@
   background: red;
   letter-spacing: 5px;
 }
+
+#title-srp {
+  font-family: 'Bangers', cursive;
+  font-size: 500%;
+  padding: 70px 100px;
+  letter-spacing: 5px;
+  border: none;
+}
+
+.container, .right-container, .modal, .text-center {
+  font-family: 'Roboto Mono', monospace;
+}
