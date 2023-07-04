@@ -61,3 +61,15 @@
   border: 1px solid;
   width: 100%;
 }
+
+.container {
+  display: flex;
+}
+.left-container {
+  flex: 1;
+  padding: 1rem;
+}
+.right-container {
+  flex: 1;
+  padding: 1rem;
+}
