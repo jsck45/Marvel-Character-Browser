@@ -163,9 +163,20 @@ function displayWikipediaContent(content) {
   const wikipediaDisplay = document.getElementById('wikipedia-display');
   const paragraphs = content.split('\n');
   const firstParagraph = paragraphs[0];
+  const wikiExtract = document.getElementById('wiki-extract');
+  const fullWikiLink = document.getElementById('full-wiki-link');
 
-  wikipediaDisplay.innerHTML = `<p>${firstParagraph}</p>`;
-}
+  wikiExtract.innerHTML = `<p>${firstParagraph}</p>`;
+ 
+  if (content.trim() !== '') {
+    const wikipediaURL = `https://en.wikipedia.org/wiki/${encodeURIComponent(characterName)}`;
+    fullWikiLink.href = wikipediaURL;
+    fullWikiLink.style.display = 'inline';
+  } else {
+    fullWikiLink.style.display = 'none';
+  }
+};
+
 
 // Links the landing page to search results page - prepopulates the input field and triggers the submit
 userInput.value = decodeURIComponent(queryFromURL);
