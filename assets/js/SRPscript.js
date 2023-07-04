@@ -71,8 +71,9 @@ function Search_Comics(event) {
   entry = userInput.value.trim();
   if (entry === "") {
     console.log("No results returned");
-    modal.style.display = 'block';
-    modalMessage.textContent = "Please enter a search query.";
+    displayErrorModal("Please enter a search query.");
+    clearPage();
+
     return;
   }
   if (entry !== "") {
@@ -100,27 +101,26 @@ function Search_Comics(event) {
             characterIndex++;
             if (characterIndex === 50) {
               console.log("No results returned");
-              modal.style.display = 'block';
-              modalMessage.textContent = "No results found!";
+              displayErrorModal("No results found!");
               clearPage(); 
               break;
             }
           }
-          let comicscrapper = "https://gateway.marvel.com/v1/public/characters/" + id + "/comics?limit=10&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518";
-          fetch(comicscrapper)
-            .then(function(response2) {
-              response2.json().then(function(data) {
-                for (i = 0; i < data.data.results.length; i++) {
-                  currentComic = document.createElement("li");
-                  currentComic.textContent = data.data.results[i].title;
-                  comics_list.appendChild(currentComic);
-                }
-              });
-            });
-        } else {
+  let comicscrapper = "https://gateway.marvel.com/v1/public/characters/" + id + "/comics?limit=10&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518";
+  fetch(comicscrapper)
+    .then(function(response2) {
+      response2.json().then(function(data) {
+        for (i = 0; i < data.data.results.length; i++) {
+          currentComic = document.createElement("li");
+          currentComic.textContent = data.data.results[i].title;
+          comics_list.appendChild(currentComic);
+          }
+      });
+     });
+        } if (data.data.results.length === 0) {
           console.log("No results found");
-          modal.style.display = 'block';
-          modalMessage.textContent = "No results found!";
+          displayErrorModal("No results found!");
+
           clearPage(); 
         }
       });
@@ -134,10 +134,21 @@ function clearPage() {
     comics_list.removeChild(comics_list.firstChild);
   }
   document.getElementById('wikipedia-display').innerHTML = "";
+  characterIndex = 0; // Reset characterIndex
+
+}
+
+function displayErrorModal(message) {
+  if (message !== "") {
+    modal.style.display = 'block';
+    modalMessage.textContent = message;
+    clearPage();
+  }
 }
 
 Search_btn.addEventListener("click", Search_Comics);
 Search_btn.addEventListener("click", append_recent_search_li_element);
+
 
 function fetchWikipediaContent(characterName) {
   const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exintro&explaintext&redirects=1&titles=${encodeURIComponent(characterName)}`;
@@ -163,14 +174,27 @@ function displayWikipediaContent(content) {
   const wikipediaDisplay = document.getElementById('wikipedia-display');
   const paragraphs = content.split('\n');
   const firstParagraph = paragraphs[0];
+  const wikiExtract = document.getElementById('wiki-extract');
+  const fullWikiLink = document.getElementById('full-wiki-link');
 
-  wikipediaDisplay.innerHTML = `<p>${firstParagraph}</p>`;
-}
+  wikiExtract.innerHTML = `<p>${firstParagraph}</p>`;
+ 
+  if (content.trim() !== '') {
+    const wikipediaURL = `https://en.wikipedia.org/wiki/${encodeURIComponent(characterName)}`;
+    fullWikiLink.href = wikipediaURL;
+    fullWikiLink.style.display = 'inline';
+  } else {
+    fullWikiLink.style.display = 'none';
+  }
+};
+
 
 // Links the landing page to search results page - prepopulates the input field and triggers the submit
 userInput.value = decodeURIComponent(queryFromURL);
 window.addEventListener('DOMContentLoaded', function() {
-  Search_btn.click();
+  if (queryFromURL){
+    Search_btn.click();
+  }
 });
 
 
