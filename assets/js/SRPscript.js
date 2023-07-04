@@ -16,9 +16,6 @@ var modal = document.getElementById('myModal');
 var modalMessage = document.getElementById('modal-message')
 const closeBtn = document.getElementsByClassName('close')[0];
 
-
-
-
 function sort_chars(array) { 
   for (var i=0;i<(array.length-1);i++){
       var swp = false
@@ -75,7 +72,7 @@ function Search_Comics(event) {
   if (entry === "") {
     console.log("No results returned");
     modal.style.display = 'block';
-    modalMessage.textContent = "Please enter a search query."
+    modalMessage.textContent = "Please enter a search query.";
     return;
   }
   if (entry !== "") {
@@ -100,15 +97,10 @@ function Search_Comics(event) {
             if (characterIndex === 50) {
               console.log("No results returned");
               modal.style.display = 'block';
-              modalMessage.textContent = "No results found!"
+              modalMessage.textContent = "No results found!";
+              clearPage(); 
               break;
             }
-          characterIndex++;
-          if (characterIndex===50) {
-            characterIndex = 0
-            console.log("No results returned")
-            ///This is where you display the alert that no results were returned
-            break;
           }
           let comicscrapper = "https://gateway.marvel.com/v1/public/characters/" + id + "/comics?limit=10&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518";
           fetch(comicscrapper)
@@ -121,9 +113,23 @@ function Search_Comics(event) {
                 }
               });
             });
-        } 
+        } else {
+          console.log("No results found");
+          modal.style.display = 'block';
+          modalMessage.textContent = "No results found!";
+          clearPage(); 
+        }
       });
     });
+}
+
+// clears the page when the error modal pops up - recent searches is still there
+function clearPage() {
+  userInput.value = "";
+  while (comics_list.firstChild) {
+    comics_list.removeChild(comics_list.firstChild);
+  }
+  document.getElementById('wikipedia-display').innerHTML = "";
 }
 
 Search_btn.addEventListener("click", Search_Comics);
@@ -145,7 +151,7 @@ function fetchWikipediaContent(characterName) {
     .catch(function(error) {
       console.log("Error fetching Wikipedia content:", error);
       displayWikipediaContent('');
-      modal.style.display = 'block'; // Show the error modal
+      modal.style.display = 'block'; 
     });
 }
 
