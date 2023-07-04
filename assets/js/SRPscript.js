@@ -71,21 +71,26 @@ function Search_Comics(event) {
   if (entry !== "") {
     entry = "nameStartsWith=" + entry + "&";
   }
-let idscrapper = "https://gateway.marvel.com/v1/public/characters?" + entry + "limit=50&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518"
-fetch (idscrapper)
-.then(function (response) {
-  response.json().then(function(data) {
-    if (data.data.results.length>0) {
-      var results_given = data.data.results
-      results_given = sort_chars(results_given)
-      results_given = results_given.reverse()
-      while (true) {
-        console.log(results_given[characterIndex].comics.available)
-          if (results_given[characterIndex].comics.available>0) {
-              id = results_given[characterIndex].id
-              characterName = results_given[characterIndex].name
-              console.log(characterName)
-              append_recent_search()
+  let idscrapper = "https://gateway.marvel.com/v1/public/characters?" + entry + "limit=50&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518";
+  fetch(idscrapper)
+    .then(function (response) {
+      response.json().then(function (data) {
+        if (data.data.results.length > 0) {
+          while (true) {
+            console.log(data.data.results[characterIndex].comics.available);
+            if (data.data.results[characterIndex].comics.available > 0) {
+              id = data.data.results[characterIndex].id;
+              characterName = data.data.results[characterIndex].name;
+              console.log(characterName);
+              append_recent_search();
+              fetchWikipediaContent(characterName);
+              break;
+            }
+            characterIndex++;
+            if (characterIndex === 50) {
+              console.log("No results returned");
+              // Display an alert that no results were returned
+
               break;
             }
           characterIndex++;
@@ -95,120 +100,60 @@ fetch (idscrapper)
             ///This is where you display the alert that no results were returned
             break;
           }
-      }
-      let comicscrapper = "https://gateway.marvel.com/v1/public/characters/" + id +"/comics?limit=10&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518"
-      fetch (comicscrapper)
-      .then(function (response2) {
-        console.log(data.data.results)
-          response2.json().then(function(data) {
-            console.log(data.data.results)
-            for (i=0;i<data.data.results.length;i++) {
-                currentComic = document.createElement("li")
-                currentComic.textContent = data.data.results[i].title
-                comics_list.appendChild(currentComic)
-            }
-  })
-  })
-    } else {
-      console.log("No results returned")
-      ///This is where you display the alert that no results were returned
-    }
-})})
+          let comicscrapper = "https://gateway.marvel.com/v1/public/characters/" + id + "/comics?limit=10&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518";
+          fetch(comicscrapper)
+            .then(function (response2) {
+              response2.json().then(function (data) {
+                for (i = 0; i < data.data.results.length; i++) {
+                  currentComic = document.createElement("li");
+                  currentComic.textContent = data.data.results[i].title;
+                  comics_list.appendChild(currentComic);
+                }
+              });
+            });
+        } else {
+          console.log("No results returned");
+          // Display an alert that no results were returned
+        }
+      });
+    });
 }
 
 Search_btn.addEventListener("click", Search_Comics);
 Search_btn.addEventListener("click", append_recent_search_li_element);
 
-// Function to fetch and display search results from Wikipedia API
-function fetchSearchResults(query) {
-  // Construct the API URL for fetching search results from Wikipedia
-  const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exintro&explaintext&titles=${encodeURIComponent(query)}`;
+function fetchWikipediaContent(characterName) {
+  const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exintro&explaintext&redirects=1&titles=${encodeURIComponent(characterName)}`;
 
-  // Fetch search results from Wikipedia API
   fetch(apiUrl)
-    .then(function (response) {
+    .then(function(response) {
       return response.json();
     })
-    .then(function (data) {
-      if (data.hasOwnProperty('query') && data.query.hasOwnProperty('pages')) {
-        const pages = data.query.pages;
-        const pageId = Object.keys(pages)[0];
-        const extract = pages[pageId].extract;
-
-        // Extract the first paragraph
-        const firstParagraph = extract.split('\n')[0];
-
-        // Display the first paragraph
-        document.getElementById('wikipedia-display').textContent = firstParagraph;
-
-        // Construct the full Wikipedia URL using the page ID
-        const fullUrl = `https://en.wikipedia.org/?curid=${pageId}`;
-
-        // Display the extract
-        // document.getElementById('wiki-extract').textContent = extract;
-
-        // Display a link to the full article
-        const fullWikiLink = document.getElementById('full-wiki-link');
-        fullWikiLink.href = fullUrl;
-        fullWikiLink.style.display = 'inline';
-      } else {
-        // If 'pages' property is missing, display an error message or handle it gracefully
-        console.log("Pages not found in the response.");
-      }
+    .then(function(data) {
+      const pages = data.query.pages;
+      const firstPageId = Object.keys(pages)[0];
+      const extract = pages[firstPageId].extract;
+      displayWikipediaContent(extract);
     })
-    .catch(function (error) {
-      console.log('Error:', error);
+    .catch(function(error) {
+      console.log("Error fetching Wikipedia content:", error);
+      displayWikipediaContent('');
+
     });
 }
 
-// Call fetchSearchResults function immediately with the query from the URL
-fetchSearchResults(queryFromURL);
+function displayWikipediaContent(content) {
+  const wikipediaDisplay = document.getElementById('wikipedia-display');
+  const paragraphs = content.split('\n');
+  const firstParagraph = paragraphs[0];
 
-// // Add an event listener to the form submit event
-// form.addEventListener('submit', function (event) {
-//   event.preventDefault();
-//   console.log('Form submitted!');
+  wikipediaDisplay.innerHTML = `<p>${firstParagraph}</p>`;
+}
 
-//   // Get the search query from the form input field
-//   const queryFromInput = userInput.value;
-
-//   // Determine the final search query to use - either from landing page or form input
-//   const query = queryFromInput || queryFromURL;
-
-//   // Call fetchSearchResults function
-//   fetchSearchResults(query);
-// });
-
-// Clear the input field and reset search results when the page is refreshed
-window.addEventListener('beforeunload', function () {
-  userInput.value = '';
-  document.getElementById('wikipedia-display').textContent = '';
-});
-
-// Error Message Modal
-const modal = document.getElementById('myModal');
-const closeBtn = document.getElementsByClassName('close')[0];
-
-form.addEventListener('submit', function (event) {
-  event.preventDefault();
-  console.log('Form submitted!');
-
-  // Get the search query from the form input field
-  const queryFromInput = userInput.value;
-
-  if (userInput.value.trim() === '') {
-    modal.style.display = 'block';
-  } else {
-    // Get the search query from the form input field
-    const query = userInput.value;
-
-    // Redirect to the search results page with the query as a URL parameter
-    window.location.href = 'searchResultsPage.html?query=' + encodeURIComponent(query);
-  }
-});
-
-closeBtn.addEventListener('click', function () {
-  modal.style.display = 'none';
+// Links the landing page to search results page - prepopulates the input field and triggers the submit
+userInput.value = decodeURIComponent(queryFromURL);
+window.addEventListener('DOMContentLoaded', function() {
+  Search_btn.click();
 });
 
 // var publicKey;
