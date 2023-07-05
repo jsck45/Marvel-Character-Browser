@@ -15,6 +15,7 @@ var is_recent_searches = false;
 var modal = document.getElementById('myModal');
 var modalMessage = document.getElementById('modal-message')
 const closeBtn = document.getElementsByClassName('close')[0];
+var clearRecentBtn = document.getElementById('clearRecentBtn');
 
 function sort_chars(array) { 
   for (var i=0;i<(array.length-1);i++){
@@ -208,6 +209,17 @@ closeBtn.addEventListener('click', function() {
 window.addEventListener('pageshow', function(event) {
   userInput.value = '';
 });
+
+
+//Event Listener for the clear recent searches button 
+clearRecentBtn.addEventListener('click', function () {
+  localStorage.removeItem('recent-searches');
+  var lastSearches = document.querySelectorAll('.last-search');
+  lastSearches.forEach(function (lastSearch) {
+    lastSearch.remove();
+  });
+});
+
 
 // var publicKey;
 // var timestamp;
