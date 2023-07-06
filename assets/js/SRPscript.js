@@ -67,7 +67,8 @@ function Search_Comics(event) {
   event.preventDefault();
   while (comics_list.childElementCount > 0) {
     comics_list.children[0].remove();
-  }
+  } 
+
   entry = userInput.value.trim();
   if (entry === "") {
     console.log("No results returned");
@@ -110,9 +111,38 @@ function Search_Comics(event) {
   fetch(comicscrapper)
     .then(function(response2) {
       response2.json().then(function(data) {
+        console.log(data.data.results)
         for (i = 0; i < data.data.results.length; i++) {
+          var comic = data.data.results[i]
+    
           currentComic = document.createElement("li");
-          currentComic.textContent = data.data.results[i].title;
+          currentComic.setAttribute("style", "list-style-type: none; padding: 0; border-top: 1px solid; border-bottom: 1px solid")
+
+          currentComicCapsule = document.createElement("div")
+          currentComicCapsule.setAttribute("class", "flex-container")
+
+          currentComicImg = document.createElement('img')
+          currentComicImg.setAttribute("class", "flex-child-img")
+          currentComicImg.setAttribute("style", "height: 200px")
+          if (comic.images.length > 0) {
+            var thumbnailUrl = comic.images[0].path + "." + comic.images[0].extension
+            console.log(thumbnailUrl)
+            currentComicImg.src = thumbnailUrl
+            currentComicImg.alt = comic.title;
+          } else {
+            currentComicImg.src = "/C:/Users/garwo/bootcamp/Marvel-Character-Browser/assets/images/dummy_550x834_ffffff_808080_comic-not-found.jpg"
+            currentComicImg.alt = comic.title;
+            console.log(currentComicImg.src)
+          }
+
+          currentComicTitle = document.createElement('div')
+          currentComicTitle.textContent = comic.title;
+
+          currentComicTitle.setAttribute("class", "flex-child-title")
+          currentComicTitle.setAttribute("style", "padding-left:5px")
+          currentComicCapsule.appendChild(currentComicImg)
+          currentComicCapsule.appendChild(currentComicTitle)
+          currentComic.appendChild(currentComicCapsule)
           comics_list.appendChild(currentComic);
           }
       });
