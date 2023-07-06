@@ -70,6 +70,7 @@ function Search_Comics(event) {
     comics_list.children[0].remove();
   } 
 
+
   entry = userInput.value.trim();
   if (entry === "") {
     console.log("No results returned");
@@ -98,6 +99,10 @@ function Search_Comics(event) {
               console.log(characterName);
               append_recent_search();
               fetchWikipediaContent(characterName);
+              var listTitle = document.createElement("h3")
+              listTitle.setAttribute("style", "font-style: italic; text-decoration: underline; text-align:center;")
+              listTitle.textContent = "Top Result: " + characterName
+              comics_list.appendChild(listTitle)
               break;
             }
             characterIndex++;
@@ -119,6 +124,9 @@ function Search_Comics(event) {
           currentComic = document.createElement("li");
           currentComic.setAttribute("style", "list-style-type: none; padding: 0; border-top: 1px solid; border-bottom: 1px solid")
 
+          currentComiclink = document.createElement('a')
+          currentComiclink.href = comic.urls[0].url
+
           currentComicCapsule = document.createElement("div")
           currentComicCapsule.setAttribute("class", "flex-container")
 
@@ -127,13 +135,11 @@ function Search_Comics(event) {
           currentComicImg.setAttribute("style", "height: 200px")
           if (comic.images.length > 0) {
             var thumbnailUrl = comic.images[0].path + "." + comic.images[0].extension
-            console.log(thumbnailUrl)
             currentComicImg.src = thumbnailUrl
             currentComicImg.alt = comic.title;
           } else {
             currentComicImg.src = "assets/images/dummy_550x834_ffffff_808080_comic-not-found.jpg"
             currentComicImg.alt = comic.title;
-            console.log(currentComicImg.src)
           }
 
           currentComicTitle = document.createElement('div')
@@ -143,7 +149,8 @@ function Search_Comics(event) {
           currentComicTitle.setAttribute("style", "padding-left:5px")
           currentComicCapsule.appendChild(currentComicImg)
           currentComicCapsule.appendChild(currentComicTitle)
-          currentComic.appendChild(currentComicCapsule)
+          currentComiclink.appendChild(currentComicCapsule)
+          currentComic.appendChild(currentComiclink)
           comics_list.appendChild(currentComic);
           }
       });
