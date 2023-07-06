@@ -5,7 +5,7 @@ var characterName = "";
 var comics_list = document.getElementById("search-results-container");
 var urlParams = new URLSearchParams(window.location.search);
 var queryFromURL = urlParams.get('query');
-var form = document.getElementById('form'); // Get the form element
+var form = document.getElementById('form'); 
 var userInput = document.getElementById('userInput');
 var Search_btn = document.getElementById('searchBtn');
 var entry = "";
@@ -91,6 +91,8 @@ function Search_Comics(event) {
           var results_given = data.data.results
           results_given = sort_chars(results_given)
           results_given = results_given.reverse()
+          document.getElementsByClassName('right-container')[0].style.display = "block";
+
           while (true) {
             console.log(results_given[characterIndex].comics.available);
             if (results_given[characterIndex].comics.available > 0) {
@@ -172,7 +174,8 @@ function clearPage() {
     comics_list.removeChild(comics_list.firstChild);
   }
   document.getElementById('wikipedia-display').innerHTML = "";
-  characterIndex = 0; // Reset characterIndex
+  characterIndex = 0; 
+  document.getElementsByClassName('right-container')[0].style.display = "none";
 
 }
 
@@ -188,6 +191,7 @@ Search_btn.addEventListener("click", Search_Comics);
 Search_btn.addEventListener("click", append_recent_search_li_element);
 
 
+// function to fetch from wiki api
 function fetchWikipediaContent(characterName) { 
   const apiUrl = `https://en.wikipedia.org/w/api.php?origin=*&action=query&format=json&prop=extracts&exintro&explaintext&redirects=1&titles=${encodeURIComponent(characterName)}`;
 
@@ -208,6 +212,7 @@ function fetchWikipediaContent(characterName) {
     });
 }
 
+// function to only show the first paragraph of the relevant wiki page
 function displayWikipediaContent(content) {
   const wikipediaDisplay = document.getElementById('wikipedia-display');
   const paragraphs = content.split('\n');
@@ -216,7 +221,7 @@ function displayWikipediaContent(content) {
   const fullWikiLink = document.getElementById('full-wiki-link');
 
   wikiExtract.innerHTML = `<p>${firstParagraph}</p>`;
- 
+ // show link to full wikipedia page
   if (content.trim() !== '') {
     const wikipediaURL = `https://en.wikipedia.org/wiki/${encodeURIComponent(characterName)}`;
     fullWikiLink.href = wikipediaURL;
