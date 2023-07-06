@@ -1,3 +1,4 @@
+// Initial Wiki API code
 var id = "";
 var characterIndex = 0;
 var characterName = "";
@@ -33,6 +34,7 @@ function sort_chars(array) {
   }
   return(array)
 }
+
 
 function append_recent_search_li_element(event) {
   event.preventDefault();
@@ -88,6 +90,8 @@ function Search_Comics(event) {
           var results_given = data.data.results
           results_given = sort_chars(results_given)
           results_given = results_given.reverse()
+          document.getElementsByClassName('right-container')[0].style.display = "block";
+
           while (true) {
             console.log(results_given[characterIndex].comics.available);
             if (results_given[characterIndex].comics.available > 0) {
@@ -129,7 +133,7 @@ function Search_Comics(event) {
             currentComicImg.src = thumbnailUrl
             currentComicImg.alt = comic.title;
           } else {
-            currentComicImg.src = "/C:/Users/garwo/bootcamp/Marvel-Character-Browser/assets/images/dummy_550x834_ffffff_808080_comic-not-found.jpg"
+            currentComicImg.src = "assets/images/dummy_550x834_ffffff_808080_comic-not-found.jpg"
             currentComicImg.alt = comic.title;
             console.log(currentComicImg.src)
           }
@@ -156,6 +160,7 @@ function Search_Comics(event) {
     });
 }
 
+// clears the page when the error modal pops up - recent searches is still there
 function clearPage() {
   userInput.value = "";
   while (comics_list.firstChild) {
@@ -163,6 +168,7 @@ function clearPage() {
   }
   document.getElementById('wikipedia-display').innerHTML = "";
   characterIndex = 0; 
+  document.getElementsByClassName('right-container')[0].style.display = "none";
 
 }
 
@@ -178,6 +184,7 @@ Search_btn.addEventListener("click", Search_Comics);
 Search_btn.addEventListener("click", append_recent_search_li_element);
 
 
+// function to fetch from wiki api
 function fetchWikipediaContent(characterName) { 
   const apiUrl = `https://en.wikipedia.org/w/api.php?origin=*&action=query&format=json&prop=extracts&exintro&explaintext&redirects=1&titles=${encodeURIComponent(characterName)}`;
 
@@ -198,6 +205,7 @@ function fetchWikipediaContent(characterName) {
     });
 }
 
+// function to only show the first paragraph of the relevant wiki page
 function displayWikipediaContent(content) {
   const wikipediaDisplay = document.getElementById('wikipedia-display');
   const paragraphs = content.split('\n');
@@ -206,7 +214,7 @@ function displayWikipediaContent(content) {
   const fullWikiLink = document.getElementById('full-wiki-link');
 
   wikiExtract.innerHTML = `<p>${firstParagraph}</p>`;
- 
+ // show link to full wikipedia page
   if (content.trim() !== '') {
     const wikipediaURL = `https://en.wikipedia.org/wiki/${encodeURIComponent(characterName)}`;
     fullWikiLink.href = wikipediaURL;
@@ -218,6 +226,7 @@ function displayWikipediaContent(content) {
 };
 
 
+// Links the landing page to search results page - prepopulates the input field and triggers the submit
 userInput.value = decodeURIComponent(queryFromURL);
 window.addEventListener('DOMContentLoaded', function() {
   if (queryFromURL){
@@ -225,14 +234,19 @@ window.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+
+// Close modal
 closeBtn.addEventListener('click', function() {
   modal.style.display = 'none';
 });
 
+// Clear input field when back button is pressed
 window.addEventListener('pageshow', function(event) {
   userInput.value = '';
 });
 
+
+//Event Listener for the clear recent searches button 
 clearRecentBtn.addEventListener('click', function () {
   localStorage.removeItem('recent-searches');
   var lastSearches = document.querySelectorAll('.last-search');

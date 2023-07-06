@@ -76,7 +76,7 @@
 
 #title {
   font-family: 'Bangers', cursive, Arial, Helvetica, sans-serif;
-  font-size: 500%;
+  font-size: 300%;
   padding: 70px 100px;
   background: red;
   letter-spacing: 5px;
@@ -84,7 +84,8 @@
 
 #title-srp {
   font-family: 'Bangers', cursive;
-  font-size: 500%;
+  font-size: 300%;
+  text-align: center;
   padding: 70px 100px;
   letter-spacing: 5px;
   border: none;
@@ -133,5 +134,9 @@
 
   .right-container {
       flex-basis: 50%;
+  }
+
+  #title, #title-srp {
+      font-size: 500%;
   }
 }
