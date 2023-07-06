@@ -144,11 +144,13 @@ function Search_Comics(event) {
             currentComicImg.alt = comic.title;
           }
 
-          currentComicTitle = document.createElement('div')
+          currentComicTitle = document.createElement('a')
           currentComicTitle.textContent = comic.title;
 
           currentComicTitle.setAttribute("class", "flex-child-title")
           currentComicTitle.setAttribute("style", "padding-left:5px")
+          currentComicTitle.setAttribute("href", comic.urls[0].url);
+          currentComicTitle.setAttribute("target", "_blank");
           currentComicCapsule.appendChild(currentComicImg)
           currentComicCapsule.appendChild(currentComicTitle)
           currentComiclink.appendChild(currentComicCapsule)
@@ -261,3 +263,4 @@ clearRecentBtn.addEventListener('click', function () {
     lastSearch.remove();
   });
 });
+
