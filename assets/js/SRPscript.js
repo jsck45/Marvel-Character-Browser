@@ -1,11 +1,10 @@
-// Initial Wiki API code
 var id = "";
 var characterIndex = 0;
 var characterName = "";
 var comics_list = document.getElementById("search-results-container");
 var urlParams = new URLSearchParams(window.location.search);
 var queryFromURL = urlParams.get('query');
-var form = document.getElementById('form'); // Get the form element
+var form = document.getElementById('form'); 
 var userInput = document.getElementById('userInput');
 var Search_btn = document.getElementById('searchBtn');
 var entry = "";
@@ -34,7 +33,6 @@ function sort_chars(array) {
   }
   return(array)
 }
-
 
 function append_recent_search_li_element(event) {
   event.preventDefault();
@@ -158,14 +156,13 @@ function Search_Comics(event) {
     });
 }
 
-// clears the page when the error modal pops up - recent searches is still there
 function clearPage() {
   userInput.value = "";
   while (comics_list.firstChild) {
     comics_list.removeChild(comics_list.firstChild);
   }
   document.getElementById('wikipedia-display').innerHTML = "";
-  characterIndex = 0; // Reset characterIndex
+  characterIndex = 0; 
 
 }
 
@@ -221,7 +218,6 @@ function displayWikipediaContent(content) {
 };
 
 
-// Links the landing page to search results page - prepopulates the input field and triggers the submit
 userInput.value = decodeURIComponent(queryFromURL);
 window.addEventListener('DOMContentLoaded', function() {
   if (queryFromURL){
@@ -229,19 +225,14 @@ window.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-
-// Close modal
 closeBtn.addEventListener('click', function() {
   modal.style.display = 'none';
 });
 
-// Clear input field when back button is pressed
 window.addEventListener('pageshow', function(event) {
   userInput.value = '';
 });
 
-
-//Event Listener for the clear recent searches button 
 clearRecentBtn.addEventListener('click', function () {
   localStorage.removeItem('recent-searches');
   var lastSearches = document.querySelectorAll('.last-search');
@@ -249,71 +240,3 @@ clearRecentBtn.addEventListener('click', function () {
     lastSearch.remove();
   });
 });
-
-
-// var publicKey;
-// var timestamp;
-// var apiUrl;
-
-
-
-// function fetchComicThumbnails(entry) {
-//   // Construct the API URL to fetch comics for the character
-//   var comicsUrl =
-//     "https://gateway.marvel.com/v1/public/characters?" +
-//     entry +
-//     "&limit=10&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518";
-// console.log(entry);
-//   fetch(comicsUrl)
-//     .then(function (response) {
-//       if (!response.ok) {
-//         throw new Error("Failed to fetch comics for the character. Status: " + response.status);
-//       }
-//       return response.json();
-//     })
-//     .then(function (data) {
-//       console.log(data);
-//       if (!data.data || !data.data.results || data.data.results.length === 0) {
-//         throw new Error("No comics found for the character" + entry);
-//       }
-
-
-//       // Extract the comic data from the response
-//       var comicsData = data.data.results;
-
-//       // Clear the existing list items
-//       while (comics_list.firstChild) {
-//         comics_list.removeChild(comics_list.firstChild);
-//       }
-
-//       // Loop through the comic data and create list items with thumbnail images
-//       comicsData.forEach(function (comic) {
-//         var comicListItem = document.createElement("li");
-//         var comicTitle = document.createElement("span");
-//         var comicThumbnail = document.createElement("img");
-
-//         comicTitle.textContent = comic.title;
-
-//         if (comic.thumbnail && comic.thumbnail.path && comic.thumbnail.extension) {
-//           var thumbnailUrl = comic.thumbnail.path + "." + comic.thumbnail.extension;
-//           comicThumbnail.src = thumbnailUrl;
-//           comicThumbnail.alt = comic.title;
-//         } else {
-//           console.log("Missing thumbnail data for comic:", comic.title);
-//         }
-
-//         comicListItem.appendChild(comicThumbnail);
-//         comicListItem.appendChild(comicTitle);
-//         comics_list.appendChild(comicListItem);
-//       });
-//     })
-//     .catch(function (error) {
-//       console.log("Error fetching comic thumbnails:", error);
-//     });
-// }
-
-// // Assuming you have the entry value
-// var entry = "nameStartsWith=Spider-Man";
-
-// // Call fetchComicThumbnails with the entry
-// fetchComicThumbnails(entry);
