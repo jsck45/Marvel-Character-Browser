@@ -113,3 +113,25 @@
 }  
 
 
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.left-container {
+  flex-basis: 100%;
+}
+
+.right-container {
+  flex-basis: 100%;
+}
+
+@media (min-width: 768px) {
+  .left-container {
+      flex-basis: 50%;
+  }
+
+  .right-container {
+      flex-basis: 50%;
+  }
+}
