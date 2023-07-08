@@ -17,6 +17,7 @@ var modalMessage = document.getElementById('modal-message')
 const closeBtn = document.getElementsByClassName('close')[0];
 var clearRecentBtn = document.getElementById('clearRecentBtn');
 
+// Function that makes the characters with the most amounts of comics available appear first 
 function sort_chars(array) { 
   for (var i=0;i<(array.length-1);i++){
       var swp = false
@@ -35,7 +36,7 @@ function sort_chars(array) {
   return(array)
 }
 
-
+//Function that generates a button element for the most recent search items and appends it to the DOM
 function append_recent_search_li_element(event) {
   event.preventDefault();
   if (recent_searches !== null && recent_searches.trim() !== "") {
@@ -54,7 +55,7 @@ function append_recent_search_li_element(event) {
     });
   }
 }
-
+// Function that appends search terms and stores it to local storage 
 function append_recent_search() {
   if (recent_searches !== null) {
     recent_searches = recent_searches + "|" + characterName.trim();
@@ -63,10 +64,10 @@ function append_recent_search() {
   }
   localStorage.setItem('recent-searches', recent_searches);
 }
-
+// Function that clears the comic list and validates the user input 
 function Search_Comics(event) {
   event.preventDefault();
-  while (comics_list.childElementCount > 0) {
+  while (comics_list.childElementCount > 0) { 
     comics_list.children[0].remove();
   } 
 
@@ -76,13 +77,14 @@ function Search_Comics(event) {
     console.log("No results returned");
     displayErrorModal("Please enter a search query.");
     clearPage();
-
+//constructs the search query parameter if the input is not empty
     return;
   }
   if (entry !== "") {
     entry = "nameStartsWith=" + entry + "&";
   }
-
+// Fetches the Marvel API 
+ //Searches for available character comics 
   let idscrapper = "https://gateway.marvel.com/v1/public/characters?" + entry + "limit=50&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518";
   fetch(idscrapper)
     .then(function(response) {
@@ -114,7 +116,7 @@ function Search_Comics(event) {
               clearPage(); 
               break;
             }
-          }
+          } //Fetches comic data for a specific character and creates HTML elements to represent each comics and appends them to the page
   let comicscrapper = "https://gateway.marvel.com/v1/public/characters/" + id + "/comics?limit=10&ts=1&apikey=09c6684b7cdacf3a0b97f764a489708f&hash=011be6f4c78340c4c4da9a1a4a713518";
   fetch(comicscrapper)
     .then(function(response2) {
