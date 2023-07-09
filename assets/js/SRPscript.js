@@ -98,12 +98,17 @@ function Search_Comics(event) {
             if (results_given[characterIndex].comics.available > 0) {
               id = results_given[characterIndex].id;
               characterName = results_given[characterIndex].name;
-              console.log(characterName);
               append_recent_search();
+              if (characterName=="Wolverine" || characterName=="Black Panther") {
+                characterName = characterName + " (character)"
+              }
+              if (characterName=="Thor" || characterName=="Magneto" || characterName=="Gambit") {
+                characterName = characterName + " (Marvel Comics)"
+              }
               fetchWikipediaContent(characterName);
               var listTitle = document.createElement("h3")
               listTitle.setAttribute("style", "font-style: italic; text-decoration: underline; text-align:center;")
-              listTitle.textContent = "Top Result: " + characterName
+              listTitle.textContent = "Top Result: " + results_given[characterIndex].name
               comics_list.appendChild(listTitle)
               break;
             }
@@ -119,7 +124,6 @@ function Search_Comics(event) {
   fetch(comicscrapper)
     .then(function(response2) {
       response2.json().then(function(data) {
-        console.log(data.data.results)
         for (i = 0; i < data.data.results.length; i++) {
           var comic = data.data.results[i]
     
