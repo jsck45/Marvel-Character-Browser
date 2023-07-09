@@ -8,7 +8,12 @@ The user can click a link to take them to the available comics as well view the 
 ## Screenshot
 ![Marvel Character](./assets/images/)
 ## Credits and Acknowledgement
-Brian, James, Carol, Marcelo with thanks to USYD
+Brian https://github.com/MakeRedundant
+James https://github.com/J-D-garwood
+Carol https://github.com/jsck45
+Marcelo https://github.com/MDSLVA
+
+with thanks to USYD
 
 ## License
 Please refer to the repository 

@@ -3,6 +3,7 @@ const queryInput = document.getElementById('query');
 const modal = document.getElementById('myModal');
 const closeBtn = document.getElementsByClassName('close')[0];
 
+//Event Listerner for search button that redirects to searchresultspage.html
 form.addEventListener('submit', function(event) {
   event.preventDefault();
 
